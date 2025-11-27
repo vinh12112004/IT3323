@@ -43,7 +43,11 @@ void skipComment() {
   error(ERR_ENDOFCOMMENT, lineNo, colNo);
 
 }
-
+void skipLineComment() {
+  while (currentChar != EOF && currentChar != '\n') {
+    readChar();
+  }
+}
 Token* readIdentKeyword(void) {
   Token *token = makeToken(TK_IDENT, lineNo, colNo);
   int count = 0;
@@ -160,6 +164,11 @@ Token* getToken(void) {
   case CHAR_SLASH:
     token = makeToken(SB_SLASH, lineNo, colNo);
     readChar();
+    if (charCodes[currentChar] == CHAR_SLASH)
+    {
+      skipLineComment();
+      return getToken();
+    }
     return token;
   case CHAR_LT:
     token = makeToken(SB_LT, lineNo, colNo);
