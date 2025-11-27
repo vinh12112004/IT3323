@@ -7,7 +7,7 @@
 #ifndef __TOKEN_H__
 #define __TOKEN_H__
 
-#define MAX_IDENT_LEN 15
+#define MAX_IDENT_LEN 10
 #define KEYWORDS_COUNT 22
 
 typedef enum {

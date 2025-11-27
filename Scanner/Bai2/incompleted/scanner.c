@@ -55,11 +55,11 @@ Token* readIdentKeyword(void) {
 
   // 2. Đọc các ký tự LETTER hoặc DIGIT
   while (charCodes[currentChar] == CHAR_LETTER ||
-         charCodes[currentChar] == CHAR_DIGIT) {
+         charCodes[currentChar] == CHAR_DIGIT ||
+         currentChar== '_'
+        ) {
     if (count < MAX_IDENT_LEN) {
       token->string[count++] = currentChar;
-    } else {
-      error(ERR_IDENTTOOLONG, token->lineNo, token->colNo);
     }
     readChar();
   }
