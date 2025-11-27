@@ -188,6 +188,10 @@ Token* getToken(void) {
   case CHAR_PERIOD: // .
     token = makeToken(SB_PERIOD, lineNo, colNo);
     readChar();
+    if (currentChar == ')') {
+        token->tokenType = SB_RSEL;
+        readChar();
+    }
     return token;
   case CHAR_COLON: // :
     token = makeToken(SB_COLON, lineNo, colNo);
@@ -204,15 +208,27 @@ Token* getToken(void) {
   case CHAR_SINGLEQUOTE:
     return readConstChar();
   case CHAR_LPAR: // (
+    token = makeToken(SB_LPAR, lineNo, colNo);
     readChar();
     if (currentChar == '*') {
         skipComment();
         return getToken();
-    } else {
-        return makeToken(SB_LPAR, lineNo, colNo);
     }
+    if (currentChar == '.') {
+        token->tokenType = SB_LSEL;
+        readChar();
+    }
+    return token;
   case CHAR_RPAR: // )
     token = makeToken(SB_RPAR, lineNo, colNo);
+    readChar();
+    return token;
+  case CHAR_LSEL: // [
+    token = makeToken(SB_LSEL, lineNo, colNo);
+    readChar();
+    return token;
+  case CHAR_RSEL: // ]
+    token = makeToken(SB_RSEL, lineNo, colNo);
     readChar();
     return token;
   default:
