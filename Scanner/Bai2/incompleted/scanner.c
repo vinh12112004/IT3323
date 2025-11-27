@@ -155,9 +155,14 @@ Token* getToken(void) {
     token = makeToken(SB_LT, lineNo, colNo);
     readChar();
     if (currentChar == '=') {
-        token->tokenType = SB_LE;
-        readChar();
-      }
+      token->tokenType = SB_LE;
+      readChar();
+    }
+    if (currentChar == '>')
+    {
+      token->tokenType = SB_NEQ;
+      readChar();
+    }
     return token;
   case CHAR_GT:
     token = makeToken(SB_GT, lineNo, colNo);
