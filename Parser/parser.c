@@ -391,20 +391,45 @@ void compileWhileSt(void) {
 void compileForSt(void) {
   // assert("Parsing a for statement ....");
   eat(KW_FOR);
-  eat(TK_IDENT);
-  eat(SB_ASSIGN);         // :=
-  compileExpression();
-
-  if (lookAhead->tokenType == KW_TO)
-    eat(KW_TO);
-  // else if (lookAhead->tokenType == KW_DOWNTO)
-  //   eat(KW_DOWNTO);
-  else
-    error(ERR_INVALIDSTATEMENT, lookAhead->lineNo, lookAhead->colNo);
-
-  compileExpression();
-  eat(KW_DO);
-  compileStatement();
+  if (lookAhead->tokenType != SB_LPAR){
+    eat(TK_IDENT);
+    eat(SB_ASSIGN);         // :=
+    compileExpression();
+    if (lookAhead->tokenType == KW_TO){
+      eat(KW_TO);
+    }
+    // else if (lookAhead->tokenType == KW_DOWNTO)
+    //   eat(KW_DOWNTO);
+    
+    else
+      error(ERR_INVALIDSTATEMENT, lookAhead->lineNo, lookAhead->colNo);
+    compileExpression();
+    eat(KW_DO);
+    compileStatement();
+  }
+  else {
+    eat(SB_LPAR);
+    eat(TK_IDENT);
+    eat(SB_ASSIGN);         // :=
+    compileExpression();
+    if (lookAhead->tokenType == SB_SEMICOLON){
+      eat(SB_SEMICOLON);
+      compileCondition();
+    }
+    else
+      error(ERR_INVALIDSTATEMENT, lookAhead->lineNo, lookAhead->colNo);
+    if(lookAhead->tokenType == SB_SEMICOLON){
+      eat(SB_SEMICOLON);
+      eat(TK_IDENT);
+      eat(SB_ASSIGN);         // :=
+      compileExpression();
+    }
+    else
+      error(ERR_INVALIDSTATEMENT, lookAhead->lineNo, lookAhead->colNo);
+    eat(SB_RPAR);
+    compileStatement();
+  }
+  
   // assert("For statement parsed ....");
 }
 
