@@ -23,23 +23,23 @@ void scan(void) {
 
 void eat(TokenType tokenType) {
   if (lookAhead->tokenType == tokenType) {
-    printToken(lookAhead);
+    // printToken(lookAhead);
     scan();
   } else missingToken(tokenType, lookAhead->lineNo, lookAhead->colNo);
 }
 
 void compileProgram(void) {
-  assert("Parsing a Program ....");
+  // assert("Parsing a Program ....");
   eat(KW_PROGRAM);
   eat(TK_IDENT);
   eat(SB_SEMICOLON);
   compileBlock();
   eat(SB_PERIOD);
-  assert("Program parsed!");
+  // assert("Program parsed!");
 }
 
 void compileBlock(void) {
-  assert("Parsing a Block ....");
+  // assert("Parsing a Block ....");
   if (lookAhead->tokenType == KW_CONST) {
     eat(KW_CONST);
     compileConstDecl();
@@ -47,7 +47,7 @@ void compileBlock(void) {
     compileBlock2();
   } 
   else compileBlock2();
-  assert("Block parsed!");
+  // assert("Block parsed!");
 }
 
 void compileBlock2(void) {
@@ -115,12 +115,19 @@ void compileVarDecls(void) {
 
 void compileVarDecl(void) {
   eat(TK_IDENT);
-  // while (lookAhead->tokenType == SB_COMMA) {
-  //   eat(SB_COMMA);
-  //   eat(TK_IDENT);
-  // }
-  eat(SB_COLON);
-  compileType();
+  while (lookAhead->tokenType == SB_COMMA) {
+    eat(SB_COMMA);
+    eat(TK_IDENT);
+  }
+  if (lookAhead->tokenType == SB_COLON){
+    eat(SB_COLON);
+    compileType();
+  }
+  else {
+    eat(SB_EQ);
+    compileConstant();
+  }
+  
   eat(SB_SEMICOLON);
 }
 
@@ -128,17 +135,17 @@ void compileSubDecls(void) {
   
   while (lookAhead->tokenType == KW_PROCEDURE ||
          lookAhead->tokenType == KW_FUNCTION) {
-    assert("Parsing subtoutines ....");
+    // assert("Parsing subtoutines ....");
     if (lookAhead->tokenType == KW_PROCEDURE)
       compileProcDecl();
     else
       compileFuncDecl();
-    assert("Subtoutine parsed ....");
+    // assert("Subtoutine parsed ....");
   }
 }
 
 void compileFuncDecl(void) {
-  assert("Parsing a function ....");
+  // assert("Parsing a function ....");
   eat(KW_FUNCTION);
   eat(TK_IDENT);
   if (lookAhead->tokenType == SB_LPAR)
@@ -148,11 +155,11 @@ void compileFuncDecl(void) {
   eat(SB_SEMICOLON);
   compileBlock();       // function body
   eat(SB_SEMICOLON);    // end of function declaration
-  assert("Function parsed ....");
+  // assert("Function parsed ....");
 }
 
 void compileProcDecl(void) {
-  assert("Parsing a procedure ....");
+  // assert("Parsing a procedure ....");
   eat(KW_PROCEDURE);
   eat(TK_IDENT);
   if (lookAhead->tokenType == SB_LPAR)
@@ -160,7 +167,7 @@ void compileProcDecl(void) {
   eat(SB_SEMICOLON);
   compileBlock();       // procedure body
   eat(SB_SEMICOLON);    // end of procedure declaration
-  assert("Procedure parsed ....");
+  // assert("Procedure parsed ....");
 }
 
 void compileUnsignedConstant(void) {
@@ -330,41 +337,41 @@ void compileStatement(void) {
 }
 
 void compileAssignSt(void) {
-  assert("Parsing an assign statement ....");
+  // assert("Parsing an assign statement ....");
   eat(TK_IDENT);
   compileIndexes();          // optional array indexing like A(. i .)
   eat(SB_ASSIGN);            // :=  (SB_ASSIGN)
   compileExpression();
-  assert("Assign statement parsed ....");
+  // assert("Assign statement parsed ....");
 }
 
 void compileCallSt(void) {
-  assert("Parsing a call statement ....");
+  // assert("Parsing a call statement ....");
   eat(KW_CALL);
   eat(TK_IDENT);
   if (lookAhead->tokenType == SB_LPAR) {
     compileArguments();
   }
-  assert("Call statement parsed ....");
+  // assert("Call statement parsed ....");
 }
 
 void compileGroupSt(void) {
-  assert("Parsing a group statement ....");
+  // assert("Parsing a group statement ....");
   eat(KW_BEGIN);
   compileStatements();
   eat(KW_END);
-  assert("Group statement parsed ....");
+  // assert("Group statement parsed ....");
 }
 
 void compileIfSt(void) {
-  assert("Parsing an if statement ....");
+  // assert("Parsing an if statement ....");
   eat(KW_IF);
   compileCondition();
   eat(KW_THEN);
   compileStatement();
   if (lookAhead->tokenType == KW_ELSE) 
     compileElseSt();
-  assert("If statement parsed ....");
+  // assert("If statement parsed ....");
 }
 
 void compileElseSt(void) {
@@ -373,16 +380,16 @@ void compileElseSt(void) {
 }
 
 void compileWhileSt(void) {
-  assert("Parsing a while statement ....");
+  // assert("Parsing a while statement ....");
   eat(KW_WHILE);
   compileCondition();
   eat(KW_DO);
   compileStatement();
-  assert("While statement parsed ....");
+  // assert("While statement parsed ....");
 }
 
 void compileForSt(void) {
-  assert("Parsing a for statement ....");
+  // assert("Parsing a for statement ....");
   eat(KW_FOR);
   eat(TK_IDENT);
   eat(SB_ASSIGN);         // :=
@@ -398,7 +405,7 @@ void compileForSt(void) {
   compileExpression();
   eat(KW_DO);
   compileStatement();
-  assert("For statement parsed ....");
+  // assert("For statement parsed ....");
 }
 
 void compileArguments(void) {
@@ -434,13 +441,13 @@ void compileCondition2(void) {
 }
 
 void compileExpression(void) {
-  assert("Parsing an expression");
+  // assert("Parsing an expression");
   if (lookAhead->tokenType == SB_PLUS || lookAhead->tokenType == SB_MINUS) {
     eat(lookAhead->tokenType);   // optional leading + or -
   }
   compileTerm();
   compileExpression2();
-  assert("Expression parsed");
+  // assert("Expression parsed");
 }
 
 void compileExpression2(void) {

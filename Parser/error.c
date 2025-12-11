@@ -9,6 +9,7 @@
 #include "error.h"
 
 void error(ErrorCode err, int lineNo, int colNo) {
+  printf("\n");
   switch (err) {
   case ERR_ENDOFCOMMENT:
     printf("%d-%d:%s\n", lineNo, colNo, ERM_ENDOFCOMMENT);
@@ -69,6 +70,7 @@ void error(ErrorCode err, int lineNo, int colNo) {
 }
 
 void missingToken(TokenType tokenType, int lineNo, int colNo) {
+  printf("\n");
   printf("%d-%d:Missing %s\n", lineNo, colNo, tokenToString(tokenType));
   exit(0);
 }
