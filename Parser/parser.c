@@ -470,6 +470,17 @@ void compileExpression(void) {
   if (lookAhead->tokenType == SB_PLUS || lookAhead->tokenType == SB_MINUS) {
     eat(lookAhead->tokenType);   // optional leading + or -
   }
+  // if (lookAhead->tokenType == SB_GT || lookAhead->tokenType == SB_GE ||
+  //     lookAhead->tokenType == SB_LT || lookAhead->tokenType == SB_LE ||
+  //     lookAhead->tokenType == SB_EQ || lookAhead->tokenType == SB_NEQ) {
+  //       eat(lookAhead->tokenType);
+  //       compileUnsignedConstant();
+  //       eat(SB_QUESTION);
+  //       compileExpression();
+  //       eat(SB_COLON);
+  //       compileExpression();
+  //       return;
+  // }
   compileTerm();
   compileExpression2();
   // assert("Expression parsed");
@@ -485,7 +496,13 @@ void compileExpression2(void) {
 
 
 void compileExpression3(void) {
-  // TODO
+  compileExpression();          // parse basic expression (including +,-)
+  if (lookAhead->tokenType == SB_QUESTION) {
+    eat(SB_QUESTION);
+    compileExpression3();       // parse true branch
+    eat(SB_COLON);
+    compileExpression3();       // parse false branch
+  }
 }
 
 void compileTerm(void) {

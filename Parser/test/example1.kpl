@@ -1,3 +1,4 @@
 Program Example1; (* Example 1 *)
 Begin
+    x:= a>b ? a+5 : b*2;
 End. (* Example 1 *)

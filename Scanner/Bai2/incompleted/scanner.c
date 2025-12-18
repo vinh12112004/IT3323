@@ -134,6 +134,7 @@ Token* getToken(void) {
 
   if (currentChar == EOF) 
     return makeToken(TK_EOF, lineNo, colNo);
+  printf("DEBUG: currentChar=%d '%c'\n", currentChar, currentChar);
 
   switch (charCodes[currentChar]) {
   case CHAR_SPACE: skipBlank(); return getToken();

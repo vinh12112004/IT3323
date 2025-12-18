@@ -124,7 +124,6 @@ Token* getToken(void) {
 
   if (currentChar == EOF) 
     return makeToken(TK_EOF, lineNo, colNo);
-
   switch (charCodes[currentChar]) {
   case CHAR_SPACE: skipBlank(); return getToken();
   case CHAR_LETTER: return readIdentKeyword();
@@ -225,6 +224,11 @@ Token* getToken(void) {
     token = makeToken(SB_RPAR, lineNo, colNo);
     readChar(); 
     return token;
+  case CHAR_QUESTION:
+    token = makeToken(SB_QUESTION, lineNo, colNo);
+    printf("DEBUG: QUESTION token at %d:%d\n", lineNo, colNo);
+    readChar(); 
+    return token;
   default:
     token = makeToken(TK_NONE, lineNo, colNo);
     error(ERR_INVALIDSYMBOL, lineNo, colNo);
@@ -296,6 +300,7 @@ void printToken(Token *token) {
   case SB_RPAR: printf("SB_RPAR\n"); break;
   case SB_LSEL: printf("SB_LSEL\n"); break;
   case SB_RSEL: printf("SB_RSEL\n"); break;
+  case SB_QUESTION: printf("SB_QUESTION\n"); break;
   }
 }
 
